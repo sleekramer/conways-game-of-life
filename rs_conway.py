@@ -7,7 +7,7 @@ import random
 width = 1200
 height = 600
 cellsize = 10
-fps = 1.0
+fps = 5.0
 
 # Catch if width and height are valid for board
 assert width % cellsize == 0
@@ -36,6 +36,10 @@ def blanks(gridDict):
 	for y in range(0, height, cellsize):
 		for x in range (0, width, cellsize):
 				gridDict[x,y] = cell((x,y), random.randint(0,1))
+	
+	
+	print str(gridDict[(100,100)].loc) + '\t' + str(gridDict[(100,100)].stat)
+
 	return gridDict
 
 def check_neighbors(item, gridDict):
@@ -60,7 +64,9 @@ def check_neighbors(item, gridDict):
 	# print('%s %s') % (alive, dead)
 	if dead == 1:
 		# print("ALIVE")
-		if alive < 2 or alive > 3:
+		if alive < 2:
+			newStat = 0
+		elif alive > 3:
 			newStat = 0
 		else:
 			newStat = 1
@@ -69,7 +75,7 @@ def check_neighbors(item, gridDict):
 		if alive == 3:
 			newStat = 1
 		else:
-			pass
+			newStat = 0
 
 	return cell(item, newStat)
 
@@ -78,13 +84,20 @@ def tick(gridDict):
 	newDraw = {}
 	for item in gridDict:
 		newDraw[item] = check_neighbors(item, gridDict)
-	gridDict = newDraw.copy()
+	gridDict = newDraw
+	
+	count = 0
+	for item in newDraw:
+		count += gridDict[item].stat
+	print count
+	# debugging
 	count = 0
 	for item in gridDict:
 		count += gridDict[item].stat
+	# print str(gridDict[(100,100)].loc) + '\t' + str(gridDict[(100,100)].stat)
 	print count
 
-	color(newDraw)
+	color(gridDict)
 
 def color(gridDict):
 	to_col = gridDict
@@ -123,12 +136,12 @@ def main():
 				pygame.quit()
 				sys.exit()
 		tick(gridDict)
-		# try:
+		
 		pygame.draw.rect(display_surface, red, (x,y,cellsize,cellsize))
-		# except:
-		# 	pass
 		x -= 10
 		y -= 10
+
+		drawGrid()
 		pygame.display.update()
 		fpsclock.tick(fps)
 
