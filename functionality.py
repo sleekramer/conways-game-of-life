@@ -9,32 +9,36 @@ def create_glider(gridDict, x, y):
 	x = round_up_nearest_ten(x)
 	y = round_up_nearest_ten(y)
 
-	# draw one of four orientations for glider
-	direction = random.randint(0,3)
-	if direction == 0:
-		gridDict[x,y].stat = 1
-		gridDict[x+10,y-10].stat = 1
-		gridDict[x+20,y+10].stat = 1
-		gridDict[x+20,y].stat = 1
-		gridDict[x+20,y-10].stat = 1
-	elif direction == 1:
-		gridDict[x,y].stat = 1
-		gridDict[x-10,y-10].stat = 1
-		gridDict[x-10,y-20].stat = 1
-		gridDict[x,y-20].stat = 1
-		gridDict[x+10,y-20].stat = 1
-	elif direction == 2:
-		gridDict[x,y].stat = 1
-		gridDict[x-10,y+10].stat = 1
-		gridDict[x-20,y+10].stat = 1
-		gridDict[x-20,y].stat = 1
-		gridDict[x-20,y-10].stat = 1
-	else:
-		gridDict[x,y].stat = 1
-		gridDict[x+10,y+10].stat = 1
-		gridDict[x+10,y+20].stat = 1
-		gridDict[x,y+20].stat = 1
-		gridDict[x-10,y+20].stat = 1
+	#catches when drawn pixels are off of screen
+	try:
+		# draw one of four orientations for glider
+		direction = random.randint(0,3)
+		if direction == 0:
+			gridDict[x,y].stat = 1
+			gridDict[x+10,y-10].stat = 1
+			gridDict[x+20,y+10].stat = 1
+			gridDict[x+20,y].stat = 1
+			gridDict[x+20,y-10].stat = 1
+		elif direction == 1:
+			gridDict[x,y].stat = 1
+			gridDict[x-10,y-10].stat = 1
+			gridDict[x-10,y-20].stat = 1
+			gridDict[x,y-20].stat = 1
+			gridDict[x+10,y-20].stat = 1
+		elif direction == 2:
+			gridDict[x,y].stat = 1
+			gridDict[x-10,y+10].stat = 1
+			gridDict[x-20,y+10].stat = 1
+			gridDict[x-20,y].stat = 1
+			gridDict[x-20,y-10].stat = 1
+		else:
+			gridDict[x,y].stat = 1
+			gridDict[x+10,y+10].stat = 1
+			gridDict[x+10,y+20].stat = 1
+			gridDict[x,y+20].stat = 1
+			gridDict[x-10,y+20].stat = 1
+	except KeyError:
+		pass
 
 # returns a random rgb() color tuple from a preset array
 def random_color():
