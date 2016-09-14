@@ -1,5 +1,6 @@
 import pygame, sys
 from pygame.locals import *
+import numpy as np
 
 # Define global variables
 width = 1200
@@ -14,6 +15,13 @@ black = (0,  0,  0)
 white = (255,255,255)
 darkgrey = (40, 40, 40)
 
+gridDict = {}
+
+class cell:
+	def __init__(self, loc, stat):
+		self.loc = loc
+		self.stat = stat
+
 def drawGrid():
 	for x in range(0, width, cellsize):
 		pygame.draw.line(display_surface, darkgrey, (x,0),(x,height))
@@ -21,6 +29,29 @@ def drawGrid():
 		pygame.draw.line(display_surface, darkgrey, (0,y),(width,y))
 	return None
 
+def blanks():
+	for y in range(0, height, cellsize):
+		for x in range (0, width, cellsize):
+				gridDict[x,y] = cell((x,y), 1)
+	return gridDict
+
+def check_neighbors(indcell):
+	# passes x,y of the cell looked up from blanks and returns 0 or 1
+	
+
+	return indcell
+
+# cycles through
+def tick():
+	newDraw = {}
+	for item in gridDict:
+		newDraw[item] = check_neighbors(gridDict[item])
+
+def color():
+	to_col = blanks()
+	for item in to_col:
+		if to_col[item].stat == 1:
+			pygame.draw.rect(display_surface, white, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
 
 def main():
 	pygame.init()
@@ -31,12 +62,15 @@ def main():
 	display_surface.fill(black)
 	pygame.display.set_caption('Game of Life') 
 
+	color()
+	drawGrid()
 	while True: #main game loop
 		for event in pygame.event.get():
+			tick()
 			if event.type == QUIT:
 				pygame.quit()
 				sys.exit()
-		drawGrid()
+		
 		pygame.display.update()
 
 
