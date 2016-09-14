@@ -43,53 +43,53 @@ def random_color():
 
 def gun(gridDict):
 	# far left four squares
-	gridDict[390,200].stat = 1
-	gridDict[400,200].stat = 1
-	gridDict[390,210].stat = 1
-	gridDict[400,210].stat = 1
+	gridDict[390-300,200].stat = 1
+	gridDict[400-300,200].stat = 1
+	gridDict[390-300,210].stat = 1
+	gridDict[400-300,210].stat = 1
 
 	# middle left
-	gridDict[470,210].stat = 1
-	gridDict[470,220].stat = 1
-	gridDict[480,220].stat = 1
-	gridDict[480,200].stat = 1
-	gridDict[490,200].stat = 1
-	gridDict[490,210].stat = 1
+	gridDict[470-300,210].stat = 1
+	gridDict[470-300,220].stat = 1
+	gridDict[480-300,220].stat = 1
+	gridDict[480-300,200].stat = 1
+	gridDict[490-300,200].stat = 1
+	gridDict[490-300,210].stat = 1
 
 	#middle-middle
-	gridDict[550,220].stat = 1
-	gridDict[550,230].stat = 1
-	gridDict[550,240].stat = 1
-	gridDict[560,220].stat = 1
-	gridDict[570,230].stat = 1
+	gridDict[550-300,220].stat = 1
+	gridDict[550-300,230].stat = 1
+	gridDict[550-300,240].stat = 1
+	gridDict[560-300,220].stat = 1
+	gridDict[570-300,230].stat = 1
 
 	#middle-top
-	gridDict[610,210-20].stat = 1
-	gridDict[610,220-20].stat = 1
-	gridDict[620,220-20].stat = 1
-	gridDict[620,200-20].stat = 1
-	gridDict[630,200-20].stat = 1
-	gridDict[630,210-20].stat = 1
+	gridDict[610-300,210-20].stat = 1
+	gridDict[610-300,220-20].stat = 1
+	gridDict[620-300,220-20].stat = 1
+	gridDict[620-300,200-20].stat = 1
+	gridDict[630-300,200-20].stat = 1
+	gridDict[630-300,210-20].stat = 1
 
 	#middle-bottom
-	gridDict[630,210-20+110].stat = 1
-	gridDict[630,220-20+110].stat = 1
-	gridDict[640,210-20+110].stat = 1
-	gridDict[650,210-20+110].stat = 1
-	gridDict[640,210-20+130].stat = 1
+	gridDict[630-300,210-20+110].stat = 1
+	gridDict[630-300,220-20+110].stat = 1
+	gridDict[640-300,210-20+110].stat = 1
+	gridDict[650-300,210-20+110].stat = 1
+	gridDict[640-300,210-20+130].stat = 1
 
 	#right bottom
-	gridDict[740,250].stat = 1
-	gridDict[740,250+10].stat = 1
-	gridDict[740,250+20].stat = 1
-	gridDict[750,250].stat = 1
-	gridDict[760,250+10].stat = 1
+	gridDict[740-300,250].stat = 1
+	gridDict[740-300,250+10].stat = 1
+	gridDict[740-300,250+20].stat = 1
+	gridDict[750-300,250].stat = 1
+	gridDict[760-300,250+10].stat = 1
 
 	#far right four squares
-	gridDict[730,180].stat = 1
-	gridDict[740,180].stat = 1
-	gridDict[730,190].stat = 1
-	gridDict[740,190].stat = 1
+	gridDict[730-300,180].stat = 1
+	gridDict[740-300,180].stat = 1
+	gridDict[730-300,190].stat = 1
+	gridDict[740-300,190].stat = 1
 
 
 

@@ -7,8 +7,8 @@ import time
 from functionality import create_glider, random_color, gun
 
 # Define global variables
-width = 1200
-height = 600
+width = 500
+height = 500
 cellsize = 10
 fps = 60.0
 # Catch if width and height are valid for board
@@ -106,7 +106,7 @@ def color(gridDict):
 	for item in to_col:
 		# draw live cells as a colored rect
 		if to_col[item].stat == 1:
-			pygame.draw.rect(display_surface, white, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
+			pygame.draw.rect(display_surface, random_color(), (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
 		# draw dead cells as black rect
 		elif to_col[item].stat ==0:
 			pygame.draw.rect(display_surface, black, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
