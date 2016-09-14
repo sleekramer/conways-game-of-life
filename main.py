@@ -1,14 +1,16 @@
 import pygame, sys
 from pygame.locals import *
-import numpy as np
+# import numpy as np
+import math
 import random
+import time
+from functionality import create_glider, random_color, gun
 
 # Define global variables
 width = 1200
 height = 600
 cellsize = 10
-fps = 2.0
-
+fps = 60.0
 # Catch if width and height are valid for board
 assert width % cellsize == 0
 assert height % cellsize == 0
@@ -18,13 +20,16 @@ white = (255,255,255)
 darkgrey = (40, 40, 40)
 red = (220,20,60)
 
+# use these to track current cells and updates
 gridDict = {}
+otherDict = {}
 
 class cell:
 	def __init__(self, loc, stat):
 		self.loc = loc
 		self.stat = stat
 
+# draw an empty grid for our cells to live in
 def drawGrid():
 	for x in range(0, width, cellsize):
 		pygame.draw.line(display_surface, darkgrey, (x,0),(x,height))
@@ -32,112 +37,96 @@ def drawGrid():
 		pygame.draw.line(display_surface, darkgrey, (0,y),(width,y))
 	return None
 
+# fill gridDict will cells, randomly assign cell.stat values
 def blanks(gridDict):
+
 	for y in range(0, height, cellsize):
 		for x in range (0, width, cellsize):
-				gridDict[x,y] = cell((x,y), random.randint(0,1))
+			# stat = 1 if random.randint(0,12) > 10 else 0
+			stat = 0
+			gridDict[x,y] = cell((x,y), stat)
 
-	# print str(gridDict[(100,100)].loc) + '\t' + str(gridDict[(100,100)].stat)
+	gun(gridDict)
 
 	return gridDict
 
+
 def check_neighbors(item, gridDict):
+	'''
+		alive - number of neighboring cells that are alive
+		dead - 1: current cell is alive, 0: its dead
+		newStat - value to assign to the new cell object
+	'''
 	alive = 0
 	dead = 0
 	newStat = 0
 
-	# passes x,y of the cell looked up from blanks and returns 0 or 1
-
-	neighbors = {}
+	# cycle through neigbors and increment alive and assign dead
 	for x in [10, -10, 0]:
 		for y in [10, -10, 0]:
 			if (x,y) != (0,0):
 					try:
-						# neighbors.update({(item[0]+x,item[1]+y):gridDict[(item[0]+x,item[1]+y)]})
 						alive += gridDict[(item[0]+x,item[1]+y)].stat
-					except KeyError: 
+					except KeyError:
 						pass
 			else:
 				try:
 					dead += gridDict[(item[0]+x,item[1]+y)].stat
-				except KeyError: 
+				except KeyError:
 					pass
-	# alive = 0
-	# dead = 0
-	# newStat = 0
-	# print item
-	# print len(neighbors)
-	# for item in neighbors:
-	# 	# print str(neighbors[item].stat) + '\t' + str(neighbors[item].loc)
-	# 	if neighbors[item].stat == 1:
-	# 		alive += 1
-	# 	else:
-	# 		dead += 1
-
-
-	# print('%s %s') % (alive, dead)
+	# implement rules for conway's game of life
 	if dead == 1:
-		# print("ALIVE")
-		if alive < 2:
-			newStat = 0
-		elif alive > 3:
+		if alive < 2 or alive > 3:
 			newStat = 0
 		else:
 			newStat = 1
 	elif dead == 0:
-		# print("DEAD")
 		if alive == 3:
 			newStat = 1
 		else:
-			newStat = 0
+			pass
 
 	return cell(item, newStat)
 
-# cycles through
-def tick(gridDict):
-	newDraw = {}
+# update cells for next round
+def tick(gridDict, otherDict):
 	for item in gridDict:
-		gridDict[item] = check_neighbors(item, gridDict)
-	# gridDict = newDraw
-	
-	count = 0
-	for item in gridDict:
-		count += gridDict[item].stat
-	# print str(gridDict[(100,100)].loc) + '\t' + str(gridDict[(100,100)].stat)
-	# print count
+		otherDict[item] = check_neighbors(item, gridDict)
 
+	copyDict = otherDict.copy()
+	otherDict = {}
+	gridDict = copyDict.copy()
+	# redraw cells
 	color(gridDict)
+	return gridDict, otherDict
 
-
+# draw the cells
 def color(gridDict):
 	to_col = gridDict
 	for item in to_col:
+		# draw live cells as a colored rect
 		if to_col[item].stat == 1:
 			pygame.draw.rect(display_surface, white, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
+		# draw dead cells as black rect
 		elif to_col[item].stat ==0:
 			pygame.draw.rect(display_surface, black, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
 
-
-def main():
+def main(gridDict, otherDict):
 	pygame.init()
 
 	global display_surface
 
 	fpsclock = pygame.time.Clock()
-	display_surface = pygame.display.set_mode((width,height)) 
+	display_surface = pygame.display.set_mode((width,height))
 	display_surface.fill(black)
-	pygame.display.set_caption('Game of Life') 
+	pygame.display.set_caption('Game of Life')
 
 	blanks(gridDict)
 	color(gridDict)
-	# for item in gridDict:
-	# 	print(item)
-	# 	print(gridDict[item])
-	# 	sys.exit()
-
 	drawGrid()
 
 	pygame.display.update()
+	# time.sleep(40)
 	x = width
 	y = height
 	while True: #main game loop
@@ -145,12 +134,12 @@ def main():
 			if event.type == QUIT:
 				pygame.quit()
 				sys.exit()
+		mouse = pygame.mouse.get_pressed()
+		pos = pygame.mouse.get_pos()
+		if mouse[0]:
+			create_glider(gridDict,pos[0],pos[1])
+		gridDict, otherDict = tick(gridDict, otherDict)
 
-			tick(gridDict)
-		
-		pygame.draw.rect(display_surface, red, (x,y,cellsize,cellsize))
-		x -= 10
-		y -= 10
 
 		drawGrid()
 		pygame.display.update()
@@ -158,4 +147,4 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
+	main(gridDict, otherDict)
