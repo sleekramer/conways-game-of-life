@@ -7,7 +7,7 @@ import random
 width = 1200
 height = 600
 cellsize = 10
-fps = 5.0
+fps = 2.0
 
 # Catch if width and height are valid for board
 assert width % cellsize == 0
@@ -36,9 +36,8 @@ def blanks(gridDict):
 	for y in range(0, height, cellsize):
 		for x in range (0, width, cellsize):
 				gridDict[x,y] = cell((x,y), random.randint(0,1))
-	
-	
-	print str(gridDict[(100,100)].loc) + '\t' + str(gridDict[(100,100)].stat)
+
+	# print str(gridDict[(100,100)].loc) + '\t' + str(gridDict[(100,100)].stat)
 
 	return gridDict
 
@@ -48,18 +47,33 @@ def check_neighbors(item, gridDict):
 	newStat = 0
 
 	# passes x,y of the cell looked up from blanks and returns 0 or 1
+
+	neighbors = {}
 	for x in [10, -10, 0]:
 		for y in [10, -10, 0]:
 			if (x,y) != (0,0):
-					try: 
+					try:
+						# neighbors.update({(item[0]+x,item[1]+y):gridDict[(item[0]+x,item[1]+y)]})
 						alive += gridDict[(item[0]+x,item[1]+y)].stat
 					except KeyError: 
 						pass
 			else:
-				try: 
+				try:
 					dead += gridDict[(item[0]+x,item[1]+y)].stat
 				except KeyError: 
 					pass
+	# alive = 0
+	# dead = 0
+	# newStat = 0
+	# print item
+	# print len(neighbors)
+	# for item in neighbors:
+	# 	# print str(neighbors[item].stat) + '\t' + str(neighbors[item].loc)
+	# 	if neighbors[item].stat == 1:
+	# 		alive += 1
+	# 	else:
+	# 		dead += 1
+
 
 	# print('%s %s') % (alive, dead)
 	if dead == 1:
@@ -83,21 +97,17 @@ def check_neighbors(item, gridDict):
 def tick(gridDict):
 	newDraw = {}
 	for item in gridDict:
-		newDraw[item] = check_neighbors(item, gridDict)
-	gridDict = newDraw
+		gridDict[item] = check_neighbors(item, gridDict)
+	# gridDict = newDraw
 	
-	count = 0
-	for item in newDraw:
-		count += gridDict[item].stat
-	print count
-	# debugging
 	count = 0
 	for item in gridDict:
 		count += gridDict[item].stat
 	# print str(gridDict[(100,100)].loc) + '\t' + str(gridDict[(100,100)].stat)
-	print count
+	# print count
 
 	color(gridDict)
+
 
 def color(gridDict):
 	to_col = gridDict
@@ -135,7 +145,8 @@ def main():
 			if event.type == QUIT:
 				pygame.quit()
 				sys.exit()
-		tick(gridDict)
+
+			tick(gridDict)
 		
 		pygame.draw.rect(display_surface, red, (x,y,cellsize,cellsize))
 		x -= 10
