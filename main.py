@@ -4,7 +4,8 @@ from pygame.locals import *
 import math
 import random
 import time
-from functionality import create_glider, random_color, gun, user_select, start, stop
+from functionality import random_color, user_select, start, stop, reset
+from presets import gun, create_glider
 
 # Define global variables
 width = 500
@@ -175,6 +176,7 @@ def main(gridDict, otherDict):
 		# Controls
 		if run:
 			run = stop(display_surface, width, height, pos, mouse)
+			resetting = reset(display_surface, width, height, pos, mouse)
 		else:
 			run = start(display_surface, width, height, pos, mouse)
 
