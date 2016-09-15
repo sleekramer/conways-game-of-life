@@ -5,7 +5,7 @@ import math
 import random
 import time
 from functionality import random_color, user_select, start, stop, reset, reset_options
-from presets import gun, create_glider, blank, tens
+from presets import gun, create_glider, blank, tens, pulsar, gliders, maze, faces, binary_101
 
 # Define global variables
 width = 500
@@ -201,9 +201,29 @@ def main(gridDict, otherDict):
 			blank(gridDict)
 			gun(gridDict)
 			reset_this = False
-		elif option == 'tens':
+		elif option == 'Ten':
 			blank(gridDict)
 			tens(gridDict)
+			reset_this = False
+		elif option == 'Binary':
+			blank(gridDict)
+			binary_101(gridDict)
+			reset_this = False
+		elif option == 'Face':
+			blank(gridDict)
+			faces(gridDict)
+			reset_this = False
+		elif option == 'Maze':
+			blank(gridDict)
+			maze(gridDict)
+			reset_this = False
+		elif option == 'Pulsar':
+			blank(gridDict)
+			pulsar(gridDict)
+			reset_this = False
+		elif option == 'Gliders':
+			blank(gridDict)
+			gliders(gridDict)
 			reset_this = False
 		else:
 			pass

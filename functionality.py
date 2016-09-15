@@ -33,6 +33,7 @@ def user_select(gridDict, x, y):
 		if gridDict[x,y].stat == 1:
 			gridDict[x,y].stat = 0
 		else:
+			print 'gridDict[%s,%s].stat = 1' % (x,y)
 			gridDict[x,y].stat = 1
 
 def text_objects(text, font):
@@ -109,7 +110,7 @@ def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 	xanchor = int(x/2.)
 	yanchor = int(y/2.)
 	
-	pygame.draw.rect(display_surface, white, (xanchor-(yanchor/2.), 0-(y/4.0)+200, yanchor, 200))
+	pygame.draw.rect(display_surface, white, (xanchor-(yanchor/2.), 0-(y/4.0)+200, yanchor, 230))
 	smallText = pygame.font.Font("freesansbold.ttf",18)
 	textSurf, textRect = text_objects("Blank", smallText)
 	textRect.center = ( (xanchor), (0-(y/4.0)+210) )
@@ -119,6 +120,31 @@ def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 	textRect.center = ( (xanchor), (0-(y/4.0)+240) )
 	display_surface.blit(textSurf, textRect)
 
+	textSurf, textRect = text_objects("Ten", smallText)
+	textRect.center = ( (xanchor), (0-(y/4.0)+270) )
+	display_surface.blit(textSurf, textRect)
+
+	textSurf, textRect = text_objects("Binary", smallText)
+	textRect.center = ( (xanchor), (0-(y/4.0)+300) )
+	display_surface.blit(textSurf, textRect)
+
+	textSurf, textRect = text_objects("Face", smallText)
+	textRect.center = ( (xanchor), (0-(y/4.0)+330) )
+	display_surface.blit(textSurf, textRect)
+
+	textSurf, textRect = text_objects("Maze", smallText)
+	textRect.center = ( (xanchor), (0-(y/4.0)+360) )
+	display_surface.blit(textSurf, textRect)
+
+	textSurf, textRect = text_objects("Pulsar", smallText)
+	textRect.center = ( (xanchor), (0-(y/4.0)+390) )
+	display_surface.blit(textSurf, textRect)
+
+	textSurf, textRect = text_objects("Gliders", smallText)
+	textRect.center = ( (xanchor), (0-(y/4.0)+420) )
+	display_surface.blit(textSurf, textRect)
+
+	# print str((pos[0],pos[1]))
 	# clear
 	if xanchor+30 > pos[0] > xanchor-30 and 94 > pos[1] > 74:
 		if mstate[0]:
@@ -129,6 +155,42 @@ def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 		# print str((pos[0],pos[1]))
 		if mstate[0]:
 			option = 'Gun'
+		else:
+			option = ''
+	elif xanchor+30 > pos[0] > xanchor-30 and 151 > pos[1] > 135:
+		# print str((pos[0],pos[1]))
+		if mstate[0]:
+			option = 'Ten'
+		else:
+			option = ''
+	elif xanchor+30 > pos[0] > xanchor-30 and 186 > pos[1] > 164:
+		# print str((pos[0],pos[1]))
+		if mstate[0]:
+			option = 'Binary'
+		else:
+			option = ''
+	elif xanchor+30 > pos[0] > xanchor-30 and 215 > pos[1] > 195:
+		# print str((pos[0],pos[1]))
+		if mstate[0]:
+			option = 'Face'
+		else:
+			option = ''
+	elif xanchor+30 > pos[0] > xanchor-30 and 243 > pos[1] > 225:
+		# print str((pos[0],pos[1]))
+		if mstate[0]:
+			option = 'Maze'
+		else:
+			option = ''
+	elif xanchor+30 > pos[0] > xanchor-30 and 275 > pos[1] > 255:
+		# print str((pos[0],pos[1]))
+		if mstate[0]:
+			option = 'Pulsar'
+		else:
+			option = ''
+	elif xanchor+30 > pos[0] > xanchor-30 and 305 > pos[1] > 285:
+		# print str((pos[0],pos[1]))
+		if mstate[0]:
+			option = 'Gliders'
 		else:
 			option = ''
 	else:
