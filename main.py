@@ -5,7 +5,7 @@ import math
 import random
 import time
 from functionality import random_color, user_select, start, stop, reset, reset_options
-from presets import gun, create_glider, blank
+from presets import gun, create_glider, blank, tens
 
 # Define global variables
 width = 500
@@ -200,6 +200,10 @@ def main(gridDict, otherDict):
 		elif option == 'Gun':
 			blank(gridDict)
 			gun(gridDict)
+			reset_this = False
+		elif option == 'tens':
+			blank(gridDict)
+			tens(gridDict)
 			reset_this = False
 		else:
 			pass

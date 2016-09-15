@@ -54,6 +54,10 @@ def gun(gridDict):
 	gridDict[730-300,190].stat = 1
 	gridDict[740-300,190].stat = 1
 
+def tens(gridDict):
+	for i in range(0,100, 10):
+		gridDict[200+i,240].stat = 1
+
 # create a conway glider
 def create_glider(gridDict, x, y):
 	x = round_up_nearest_ten(x)
