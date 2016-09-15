@@ -10,7 +10,7 @@ from functionality import create_glider, random_color, gun
 width = 500
 height = 500
 cellsize = 10
-fps = 60.0
+fps = 30.0
 # Catch if width and height are valid for board
 assert width % cellsize == 0
 assert height % cellsize == 0
@@ -19,6 +19,9 @@ black = (0,  0,  0)
 white = (255,255,255)
 darkgrey = (40, 40, 40)
 red = (220,20,60)
+b_red = (255,0,0)
+green = (0,200,0)
+b_green = (0,255,0)
 
 # use these to track current cells and updates
 gridDict = {}
@@ -106,10 +109,55 @@ def color(gridDict):
 	for item in to_col:
 		# draw live cells as a colored rect
 		if to_col[item].stat == 1:
-			pygame.draw.rect(display_surface, random_color(), (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
+			pygame.draw.rect(display_surface, white, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
 		# draw dead cells as black rect
 		elif to_col[item].stat ==0:
 			pygame.draw.rect(display_surface, black, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
+
+def banner(display_surface):
+	pygame.draw.rect(display_surface, white, (0, 470, 500, 30))
+
+def text_objects(text, font):
+    textSurface = font.render(text, True, black)
+    return textSurface, textSurface.get_rect()
+
+def start(display_surface, pos=(0,0), mstate=(0,0,0)):
+	if 225+50 > pos[0] > 225 and 475+20 > pos[1] > 475:
+		pygame.draw.rect(display_surface, b_green, (225, 475, 50, 20))
+		if mstate[0]:
+			run = True
+		else:
+			run = False
+	else:
+		pygame.draw.rect(display_surface, green, (225, 475, 50, 20))
+		run = False
+
+	smallText = pygame.font.Font("freesansbold.ttf",12)
+	textSurf, textRect = text_objects("START!", smallText)
+	textRect.center = ( (225+(50/2)), (475+(20/2)) )
+	display_surface.blit(textSurf, textRect)
+
+	return run
+
+
+def stop(display_surface, pos=(0,0), mstate=(0,0,0)):
+	if 225+50 > pos[0] > 225 and 475+20 > pos[1] > 475:
+		pygame.draw.rect(display_surface, b_red, (225, 475, 50, 20))
+		if mstate[0]:
+			run = False
+		else:
+			run = True
+	else:
+		pygame.draw.rect(display_surface, red, (225, 475, 50, 20))
+		run = True
+
+	smallText = pygame.font.Font("freesansbold.ttf",12)
+	textSurf, textRect = text_objects("STOP!", smallText)
+	textRect.center = ( (225+(50/2)), (475+(20/2)) )
+	display_surface.blit(textSurf, textRect)
+
+
+	return run
 
 def main(gridDict, otherDict):
 	pygame.init()
@@ -125,25 +173,50 @@ def main(gridDict, otherDict):
 	color(gridDict)
 	drawGrid()
 
+	banner(display_surface)
+	run = start(display_surface)
+
 	pygame.display.update()
 	# time.sleep(40)
 	x = width
 	y = height
+	mouse = (0,0,0)
+	# pos = (0,0)
 	while True: #main game loop
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				pygame.quit()
 				sys.exit()
-		mouse = pygame.mouse.get_pressed()
+			if event.type == MOUSEBUTTONDOWN:
+				mouse = (1,0,0) if event.button == 1 else (0,0,0)
+				# pos = event.pos
+			
+		# mouse = mouse if mouse else pygame.mouse.get_pressed()
 		pos = pygame.mouse.get_pos()
+		
+
 		if mouse[0]:
 			create_glider(gridDict,pos[0],pos[1])
-		gridDict, otherDict = tick(gridDict, otherDict)
-
-
+		
+		if run:
+			gridDict, otherDict = tick(gridDict, otherDict)
+		else:
+			pass
+		
 		drawGrid()
+
+		banner(display_surface)
+
+		# Controls
+		if run:
+			run = stop(display_surface, pos, mouse)
+		else:
+			run = start(display_surface, pos, mouse)
+
 		pygame.display.update()
 		fpsclock.tick(fps)
+
+		mouse = (0,0,0)
 
 
 if __name__ == '__main__':
