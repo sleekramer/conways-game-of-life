@@ -1,5 +1,9 @@
 import random
 
+def blank(gridDict):
+	for item in gridDict:
+		gridDict[item].stat = 0
+
 def gun(gridDict):
 	# far left four squares
 	gridDict[390-300,200].stat = 1

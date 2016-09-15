@@ -4,8 +4,8 @@ from pygame.locals import *
 import math
 import random
 import time
-from functionality import random_color, user_select, start, stop, reset
-from presets import gun, create_glider
+from functionality import random_color, user_select, start, stop, reset, reset_options
+from presets import gun, create_glider, blank
 
 # Define global variables
 width = 500
@@ -50,6 +50,7 @@ def blanks(gridDict):
 			stat = 0
 			gridDict[x,y] = cell((x,y), stat)
 
+	# Default Starting option
 	gun(gridDict)
 
 	return gridDict
@@ -145,6 +146,8 @@ def main(gridDict, otherDict):
 	x = width
 	y = height
 	mouse = (0,0,0)
+	reset_this = False
+	option = ''
 	# pos = (0,0)
 	while True: #main game loop
 		for event in pygame.event.get():
@@ -158,10 +161,11 @@ def main(gridDict, otherDict):
 		# mouse = mouse if mouse else pygame.mouse.get_pressed()
 		pos = pygame.mouse.get_pos()
 		
-
+		# User picks grids (not if option menu is on)
 		if mouse[0]:
-			# create_glider(gridDict,pos[0],pos[1])
-			user_select(gridDict,pos[0],pos[1])
+			if reset_this == False:
+				# create_glider(gridDict,pos[0],pos[1])
+				user_select(gridDict,pos[0],pos[1])
 
 		if run:
 			gridDict, otherDict = tick(gridDict, otherDict)
@@ -176,14 +180,36 @@ def main(gridDict, otherDict):
 		# Controls
 		if run:
 			run = stop(display_surface, width, height, pos, mouse)
-			resetting = reset(display_surface, width, height, pos, mouse)
+			run, reset_this = reset(display_surface, width, height, run, pos, mouse)
 		else:
-			run = start(display_surface, width, height, pos, mouse)
+			# stops start from being displayed with the Reset choices
+			if reset_this:
+				pass
+			else:
+				run = start(display_surface, width, height, pos, mouse)
+
+		# Brings up options menu
+		if reset_this:
+			option = reset_options(display_surface, width, height, pos, mouse)
+		else:
+			pass
+
+		if option == 'Blank':
+			blank(gridDict)
+			reset_this = False
+		elif option == 'Gun':
+			blank(gridDict)
+			gun(gridDict)
+			reset_this = False
+		else:
+			pass
+
 
 		pygame.display.update()
 		fpsclock.tick(fps)
 
 		mouse = (0,0,0)
+		option = ''
 
 
 if __name__ == '__main__':
