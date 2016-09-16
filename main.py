@@ -4,13 +4,14 @@ from pygame.locals import *
 import math
 import random
 import time
-from functionality import create_glider, random_color, gun
+from functionality import random_color, user_select, start, stop, reset, reset_options
+from presets import gun, create_glider, blank, tens, pulsar, gliders, maze, faces, binary_101
 
 # Define global variables
 width = 500
 height = 500
 cellsize = 10
-fps = 60.0
+fps = 30.0
 # Catch if width and height are valid for board
 assert width % cellsize == 0
 assert height % cellsize == 0
@@ -19,6 +20,9 @@ black = (0,  0,  0)
 white = (255,255,255)
 darkgrey = (40, 40, 40)
 red = (220,20,60)
+b_red = (255,0,0)
+green = (0,200,0)
+b_green = (0,255,0)
 
 # use these to track current cells and updates
 gridDict = {}
@@ -46,9 +50,13 @@ def blanks(gridDict):
 			stat = 0
 			gridDict[x,y] = cell((x,y), stat)
 
+	# Default Starting option
 	gun(gridDict)
 
 	return gridDict
+
+def user_tick(gridDict):
+	color(gridDict)
 
 
 def check_neighbors(item, gridDict):
@@ -106,14 +114,19 @@ def color(gridDict):
 	for item in to_col:
 		# draw live cells as a colored rect
 		if to_col[item].stat == 1:
-			pygame.draw.rect(display_surface, random_color(), (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
+			pygame.draw.rect(display_surface, white, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
 		# draw dead cells as black rect
 		elif to_col[item].stat ==0:
 			pygame.draw.rect(display_surface, black, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
 
+def banner(display_surface):
+	pygame.draw.rect(display_surface, white, (0, 470, 500, 30))
+
 def main(gridDict, otherDict):
 	pygame.init()
-
+	pygame.mixer.init()
+	pygame.mixer.music.load('sound/emotion.wav')
+	pygame.mixer.music.play(loops=-1, start=0.0)
 	global display_surface
 
 	fpsclock = pygame.time.Clock()
@@ -125,25 +138,102 @@ def main(gridDict, otherDict):
 	color(gridDict)
 	drawGrid()
 
+	banner(display_surface)
+	run = start(display_surface, width, height)
+
 	pygame.display.update()
 	# time.sleep(40)
 	x = width
 	y = height
+	mouse = (0,0,0)
+	reset_this = False
+	option = ''
+	# pos = (0,0)
 	while True: #main game loop
 		for event in pygame.event.get():
 			if event.type == QUIT:
 				pygame.quit()
 				sys.exit()
-		mouse = pygame.mouse.get_pressed()
+			if event.type == MOUSEBUTTONDOWN:
+				mouse = (1,0,0) if event.button == 1 else (0,0,0)
+				# pos = event.pos
+			
+		# mouse = mouse if mouse else pygame.mouse.get_pressed()
 		pos = pygame.mouse.get_pos()
+		
+		# User picks grids (not if option menu is on)
 		if mouse[0]:
-			create_glider(gridDict,pos[0],pos[1])
-		gridDict, otherDict = tick(gridDict, otherDict)
+			if reset_this == False:
+				# create_glider(gridDict,pos[0],pos[1])
+				user_select(gridDict,pos[0],pos[1])
 
-
+		if run:
+			gridDict, otherDict = tick(gridDict, otherDict)
+		else:
+			pass
+		
+		user_tick(gridDict)
 		drawGrid()
+
+		banner(display_surface)
+
+		# Controls
+		if run:
+			run = stop(display_surface, width, height, pos, mouse)
+			run, reset_this = reset(display_surface, width, height, run, pos, mouse)
+		else:
+			# stops start from being displayed with the Reset choices
+			if reset_this:
+				pass
+			else:
+				run = start(display_surface, width, height, pos, mouse)
+
+		# Brings up options menu
+		if reset_this:
+			option = reset_options(display_surface, width, height, pos, mouse)
+		else:
+			pass
+
+		if option == 'Blank':
+			blank(gridDict)
+			reset_this = False
+		elif option == 'Gun':
+			blank(gridDict)
+			gun(gridDict)
+			reset_this = False
+		elif option == 'Ten':
+			blank(gridDict)
+			tens(gridDict)
+			reset_this = False
+		elif option == 'Binary':
+			blank(gridDict)
+			binary_101(gridDict)
+			reset_this = False
+		elif option == 'Face':
+			blank(gridDict)
+			faces(gridDict)
+			reset_this = False
+		elif option == 'Maze':
+			blank(gridDict)
+			maze(gridDict)
+			reset_this = False
+		elif option == 'Pulsar':
+			blank(gridDict)
+			pulsar(gridDict)
+			reset_this = False
+		elif option == 'Gliders':
+			blank(gridDict)
+			gliders(gridDict)
+			reset_this = False
+		else:
+			pass
+
+
 		pygame.display.update()
 		fpsclock.tick(fps)
+
+		mouse = (0,0,0)
+		option = ''
 
 
 if __name__ == '__main__':
