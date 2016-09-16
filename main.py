@@ -3,12 +3,14 @@ from pygame.locals import *
 # import numpy as np
 import math
 import random
+import time
+from functionality import create_glider, random_color, gun
 
 # Define global variables
-width = 1200
-height = 600
+width = 500
+height = 500
 cellsize = 10
-fps = 60
+fps = 60.0
 # Catch if width and height are valid for board
 assert width % cellsize == 0
 assert height % cellsize == 0
@@ -40,8 +42,12 @@ def blanks(gridDict):
 
 	for y in range(0, height, cellsize):
 		for x in range (0, width, cellsize):
-			stat = 1 if random.randint(0,12) > 10 else 0
+			# stat = 1 if random.randint(0,12) > 10 else 0
+			stat = 0
 			gridDict[x,y] = cell((x,y), stat)
+
+	gun(gridDict)
+
 	return gridDict
 
 
@@ -94,11 +100,6 @@ def tick(gridDict, otherDict):
 	color(gridDict)
 	return gridDict, otherDict
 
-# returns a random rgb() color tuple from a preset array
-def random_color():
-	colors = [(255,0,0),(255,0,255),(135,0,255),(0,0,255),(0,195,255),(0,255,0),(225,255,0),(255,155,0)]
-	return colors[random.randint(0,7)]
-
 # draw the cells
 def color(gridDict):
 	to_col = gridDict
@@ -109,43 +110,6 @@ def color(gridDict):
 		# draw dead cells as black rect
 		elif to_col[item].stat ==0:
 			pygame.draw.rect(display_surface, black, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
-
-def round_up_nearest_ten(n):
-	return int(math.ceil(n / 10.0)) * 10
-
-# create a conway glider
-def create_glider(gridDict, x, y):
-	x = round_up_nearest_ten(x)
-	y = round_up_nearest_ten(y)
-
-	# draw one of four orientations for glider
-	direction = random.randint(0,3)
-	if direction == 0:
-		gridDict[x,y].stat = 1
-		gridDict[x+10,y-10].stat = 1
-		gridDict[x+20,y+10].stat = 1
-		gridDict[x+20,y].stat = 1
-		gridDict[x+20,y-10].stat = 1
-	elif direction == 1:
-		gridDict[x,y].stat = 1
-		gridDict[x-10,y-10].stat = 1
-		gridDict[x-10,y-20].stat = 1
-		gridDict[x,y-20].stat = 1
-		gridDict[x+10,y-20].stat = 1
-	elif direction == 2:
-		gridDict[x,y].stat = 1
-		gridDict[x-10,y+10].stat = 1
-		gridDict[x-20,y+10].stat = 1
-		gridDict[x-20,y].stat = 1
-		gridDict[x-20,y-10].stat = 1
-	else:
-		gridDict[x,y].stat = 1
-		gridDict[x+10,y+10].stat = 1
-		gridDict[x+10,y+20].stat = 1
-		gridDict[x,y+20].stat = 1
-		gridDict[x-10,y+20].stat = 1
-
-
 
 def main(gridDict, otherDict):
 	pygame.init()
@@ -162,6 +126,7 @@ def main(gridDict, otherDict):
 	drawGrid()
 
 	pygame.display.update()
+	# time.sleep(40)
 	x = width
 	y = height
 	while True: #main game loop
@@ -176,7 +141,7 @@ def main(gridDict, otherDict):
 		gridDict, otherDict = tick(gridDict, otherDict)
 
 
-
+		drawGrid()
 		pygame.display.update()
 		fpsclock.tick(fps)
 
