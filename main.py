@@ -4,7 +4,7 @@ from pygame.locals import *
 import math
 import random
 import time
-from functionality import random_color, user_select, start, stop, reset, reset_options
+from functionality import random_color, user_select, start, stop, reset, reset_options, info_button, info
 from presets import gun, create_glider, blank, tens, pulsar, gliders, maze, faces, binary_101
 
 # Define global variables
@@ -57,7 +57,6 @@ def blanks(gridDict):
 
 def user_tick(gridDict):
 	color(gridDict)
-
 
 def check_neighbors(item, gridDict):
 	'''
@@ -147,6 +146,7 @@ def main(gridDict, otherDict):
 	y = height
 	mouse = (0,0,0)
 	reset_this = False
+	show_i = False
 	option = ''
 	# pos = (0,0)
 	while True: #main game loop
@@ -163,10 +163,9 @@ def main(gridDict, otherDict):
 		
 		# User picks grids (not if option menu is on)
 		if mouse[0]:
-			if reset_this == False:
+			if reset_this == False and show_i == False:
 				# create_glider(gridDict,pos[0],pos[1])
 				user_select(gridDict,pos[0],pos[1])
-
 		if run:
 			gridDict, otherDict = tick(gridDict, otherDict)
 		else:
@@ -181,12 +180,16 @@ def main(gridDict, otherDict):
 		if run:
 			run = stop(display_surface, width, height, pos, mouse)
 			run, reset_this = reset(display_surface, width, height, run, pos, mouse)
+			# info panel
+			run, show_i = info_button(display_surface, width, height, run, pos, mouse)
 		else:
 			# stops start from being displayed with the Reset choices
-			if reset_this:
+			if reset_this or show_i:
 				pass
 			else:
 				run = start(display_surface, width, height, pos, mouse)
+				# info panel
+				run, show_i = info_button(display_surface, width, height, run, pos, mouse)
 
 		# Brings up options menu
 		if reset_this:
@@ -228,6 +231,10 @@ def main(gridDict, otherDict):
 		else:
 			pass
 
+		if show_i:
+			show_i = info(display_surface, width, height, pos, mouse)
+		else:
+			pass
 
 		pygame.display.update()
 		fpsclock.tick(fps)
