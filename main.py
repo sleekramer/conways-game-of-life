@@ -46,8 +46,8 @@ def drawGrid():
 # fill gridDict will cells, randomly assign cell.stat values
 def blanks(gridDict):
 
-	for y in range(0, height, cellsize):
-		for x in range (0, width, cellsize):
+	for y in range(-20, height+20, cellsize):
+		for x in range (-20, width+20, cellsize):
 			# stat = 1 if random.randint(0,12) > 10 else 0
 			stat = 0
 			gridDict[x,y] = cell((x,y), stat)
@@ -94,7 +94,8 @@ def check_neighbors(item, gridDict):
 			newStat = 1
 		else:
 			pass
-
+	if x < -10 or y < -10 or x > 510 or y > 510:
+		newStat = 0
 	return cell(item, newStat)
 
 # update cells for next round
@@ -114,11 +115,13 @@ def color(gridDict):
 	to_col = gridDict
 	for item in to_col:
 		# draw live cells as a colored rect
-		if to_col[item].stat == 1:
-			pygame.draw.rect(display_surface, white, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
+		color = white if to_col[item].stat == 1 else black
+		try:
+			pygame.draw.rect(display_surface, color, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
+		except KeyError:
+			pass
 		# draw dead cells as black rect
-		elif to_col[item].stat ==0:
-			pygame.draw.rect(display_surface, black, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
+
 
 def banner(display_surface):
 	pygame.draw.rect(display_surface, white, (0, 470, 500, 30))
