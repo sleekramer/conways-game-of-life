@@ -32,7 +32,7 @@ class cell:
 		self.stat = stat
 
 # draw an empty grid for our cells to live in
-def drawGrid():
+def drawGrid(width, height):
 	for x in range(0, width, cellsize):
 		pygame.draw.line(display_surface, darkgrey, (x,0),(x,height))
 	for y in range(0, height, cellsize):
@@ -140,7 +140,7 @@ def main(gridDict, otherDict):
 	pygame.mixer.music.load('sound/emotion.wav')
 	pygame.mixer.music.play(loops=-1, start=0.0)
 
-	global display_surface, width, height
+	global display_surface
 
 	fpsclock = pygame.time.Clock()
 	display_surface = pygame.display.set_mode((width,height))
@@ -149,7 +149,7 @@ def main(gridDict, otherDict):
 
 	blanks(gridDict, width, height)
 	color(gridDict)
-	drawGrid()
+	drawGrid(width, height)
 
 	x = width
 	y = height
@@ -187,7 +187,7 @@ def main(gridDict, otherDict):
 			pass
 		
 		user_tick(gridDict)
-		drawGrid()
+		drawGrid(width, height)
 
 		banner(display_surface, x, y)
 
