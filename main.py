@@ -4,7 +4,9 @@ from pygame.locals import *
 import math
 import random
 import time
-from functionality import random_color, user_select, start, stop, reset, reset_options, info_button, info
+
+from functionality import random_color, user_select, start, stop, reset, reset_options, info_button, info, click_creator
+
 from presets import gun, create_glider, blank, tens, pulsar, gliders, maze, faces, binary_101
 
 # Define global variables
@@ -144,6 +146,7 @@ def main(gridDict, otherDict):
 	# time.sleep(40)
 	x = width
 	y = height
+	click_option = 1
 	mouse = (0,0,0)
 	reset_this = False
 	show_i = False
@@ -157,26 +160,29 @@ def main(gridDict, otherDict):
 			if event.type == MOUSEBUTTONDOWN:
 				mouse = (1,0,0) if event.button == 1 else (0,0,0)
 				# pos = event.pos
-			
+
 		# mouse = mouse if mouse else pygame.mouse.get_pressed()
 		pos = pygame.mouse.get_pos()
-		
+
 		# User picks grids (not if option menu is on)
 		if mouse[0]:
 			if reset_this == False and show_i == False:
 				# create_glider(gridDict,pos[0],pos[1])
-				user_select(gridDict,pos[0],pos[1])
+
+				user_select(gridDict,pos[0],pos[1],click_option)
+
 		if run:
 			gridDict, otherDict = tick(gridDict, otherDict)
 		else:
 			pass
-		
+
 		user_tick(gridDict)
 		drawGrid()
 
 		banner(display_surface)
 
 		# Controls
+		click_option = click_creator(display_surface, width, height, click_option, pos, mouse)
 		if run:
 			run = stop(display_surface, width, height, pos, mouse)
 			run, reset_this = reset(display_surface, width, height, run, pos, mouse)
