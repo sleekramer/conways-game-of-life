@@ -43,15 +43,27 @@ def create_glider(gridDict, x, y):
     change_stats(gridDict, coords)
 
 def create_lwss(gridDict, x, y):
-    coords = [(x,y-20),(x-10,y-10),(x+30,y-20),(x-10,y),(x+30,y),(x-10,y+10),(x,y+10),(x+10,y+10),(x+20,y+10)]
+    coords = []
+    if random.randint(0,1):
+        coords = [(x-10,y-20),(x-20,y-10),(x+20,y-20),(x-20,y),(x+20,y),(x-20,y+10),(x-10,y+10),(x,y+10),(x+10,y+10)]
+    else:
+        coords = [(x-20,y-20),(x+10,y-20),(x+20,y-10),(x-20,y),(x+20,y),(x-10,y+10),(x,y+10),(x+10,y+10),(x+20,y+10)]
     change_stats(gridDict, coords)
 
 def create_mwss(gridDict, x, y):
-    coords = [(x+10,y-20),(x-10,y-10),(x+30,y-10),(x-20,y),(x-20,y+10),(x+30,y+10),(x-20,y+20),(x-10,y+20),(x,y+20),(x+10,y+20),(x+20,y+20)]
+    coords = []
+    if random.randint(0,1):
+        coords = [(x+10,y-20),(x-10,y-10),(x+30,y-10),(x-20,y),(x-20,y+10),(x+30,y+10),(x-20,y+20),(x-10,y+20),(x,y+20),(x+10,y+20),(x+20,y+20)]
+    else:
+        coords =  [(x-10,y-20),(x-30,y-10),(x+10,y-10),(x+20,y),(x-30,y+10),(x+20,y+10),(x-20,y+20),(x-10,y+20),(x,y+20),(x+10,y+20),(x+20,y+20)]
     change_stats(gridDict, coords)
 
 def create_hwss(gridDict, x, y):
-    coords = [(x,y-20),(x+10,y-20),(x-20,y-10),(x+30,y-10),(x-30,y),(x-30,y+10),(x+30,y+10),(x-30,y+20),(x-20,y+20),(x-10,y+20),(x,y+20),(x+10,y+20),(x+20,y+20)]
+    coords = []
+    if random.randint(0,1):
+        coords = [(x,y-20),(x+10,y-20),(x-20,y-10),(x+30,y-10),(x-30,y),(x-30,y+10),(x+30,y+10),(x-30,y+20),(x-20,y+20),(x-10,y+20),(x,y+20),(x+10,y+20),(x+20,y+20)]
+    else:
+        coords = [(x-10,y-20),(x,y-20),(x-30,y-10),(x+20,y-10),(x+30,y),(x-30,y+10),(x+30,y+10),(x-20,y+20),(x-10,y+20),(x,y+20),(x+10,y+20),(x+20,y+20),(x+30,y+20)]
     change_stats(gridDict, coords)
 
 def create_boat(gridDict, x, y):

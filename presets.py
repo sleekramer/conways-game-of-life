@@ -319,13 +319,16 @@ def gliders(gridDict):
 	gridDict[240,210].stat = 1
 	gridDict[240,220].stat = 1
 
-
-
-
-
-
-
-
-
-
-
+def preset_function(option, gridDict):
+	reset_functions = {
+		"Blank" : blank,
+		"Gun" : gun,
+		"Ten" : tens,
+		"Binary" : binary_101,
+		"Face" : faces,
+		"Maze" : maze,
+		"Pulsar" : pulsar,
+		"Gliders" : gliders,
+		"Random" : rando
+	}
+	reset_functions[option](gridDict)

@@ -7,7 +7,8 @@ import time
 
 
 from functionality import random_color, user_select, start, stop, reset, reset_options, info_button, info, click_creator
-from presets import gun, create_glider, blank, tens, pulsar, gliders, maze, faces, binary_101, rando
+# from presets import gun, create_glider, blank, tens, pulsar, gliders, maze, faces, binary_101, rando
+from presets import preset_function
 
 # Define global variables
 # width = 1200
@@ -51,8 +52,8 @@ def blanks(gridDict, width, height):
 			gridDict[x,y] = cell((x,y), stat)
 
 	# Default Starting option
-	rando(gridDict)
-
+	# rando(gridDict)
+	preset_function("Random",gridDict)
 	return gridDict
 
 def user_tick(gridDict):
@@ -132,12 +133,16 @@ def main(gridDict, otherDict):
 	# get screen size
 	display_info = pygame.display.Info()
 
-	if display_info.current_w > 2000:
-		width = int(display_info.current_w/2.)
-		height = int(display_info.current_h/2.)
-	else:
-		width = int(display_info.current_w)
-		height = int(display_info.current_h)
+	# if display_info.current_w > 2000:
+	# 	width = int(display_info.current_w/2.)
+	# 	height = int(display_info.current_h/2.)
+	# else:
+	print display_info.current_w, display_info.current_h
+	width = int(display_info.current_w/1.5)
+	height = int(display_info.current_h/1.5)
+	if width < 500 or height < 500:
+		width = 500
+		height = 500
 
 	# Catch if width and height are valid for board
 	assert width % cellsize == 0
@@ -221,40 +226,10 @@ def main(gridDict, otherDict):
 		else:
 			pass
 
-		if option == 'Blank':
-			blank(gridDict)
-			reset_this = False
-		elif option == 'Gun':
-			blank(gridDict)
-			gun(gridDict)
-			reset_this = False
-		elif option == 'Ten':
-			blank(gridDict)
-			tens(gridDict)
-			reset_this = False
-		elif option == 'Binary':
-			blank(gridDict)
-			binary_101(gridDict)
-			reset_this = False
-		elif option == 'Face':
-			blank(gridDict)
-			faces(gridDict)
-			reset_this = False
-		elif option == 'Maze':
-			blank(gridDict)
-			maze(gridDict)
-			reset_this = False
-		elif option == 'Pulsar':
-			blank(gridDict)
-			pulsar(gridDict)
-			reset_this = False
-		elif option == 'Gliders':
-			blank(gridDict)
-			gliders(gridDict)
-			reset_this = False
-		elif option == 'Random':
-			blank(gridDict)
-			rando(gridDict)
+		if option != '':
+			preset_function("Blank",gridDict)
+			if option != "Blank":
+				preset_function(option,gridDict)
 			reset_this = False
 		else:
 			pass

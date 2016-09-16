@@ -114,58 +114,60 @@ def user_select(gridDict, x, y, w, h, click_option):
 			click_handler(gridDict, x, y, click_option)
 
 
+
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
 
+def draw_text(display_surface, text, center, size):
+	smallText = pygame.font.Font("freesansbold.ttf", size)
+	textSurf, textRect = text_objects(text, smallText)
+	textRect.center = center
+	display_surface.blit(textSurf, textRect)
+
 def start(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
-	xanchor = int(x/2.)
-	yanchor = int(y/2.)
-	if xanchor-25+50 > pos[0] > xanchor-25 and y-25+20 > pos[1] > y-25:
-		pygame.draw.rect(display_surface, b_green, (xanchor-25, y-25, 50, 20))
+	xanchor = int(x/2.) - 25
+	yanchor = y - 25
+	w, h = 50, 20 # width and height of button
+	if xanchor+w > pos[0] > xanchor and yanchor+h > pos[1] > yanchor:
+		pygame.draw.rect(display_surface, b_green, (xanchor, yanchor, w, h))
 		if mstate[0]:
 			run = True
 			button_tone()
 		else:
 			run = False
 	else:
-		pygame.draw.rect(display_surface, green, (xanchor-25, y-25, 50, 20))
+		pygame.draw.rect(display_surface, green, (xanchor, yanchor, w, h))
 		run = False
-
-	smallText = pygame.font.Font("freesansbold.ttf",12)
-	textSurf, textRect = text_objects("START!", smallText)
-	textRect.center = ( (xanchor-25+(50/2)), (y-25+(20/2)) )
-	display_surface.blit(textSurf, textRect)
+	draw_text(display_surface, "START!", ((xanchor+(w/2)),(yanchor+(h/2))), 12)
 
 	return run
 
 
 def stop(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
-	xanchor = int(x/2.)
-	yanchor = int(y/2.)
-	if (xanchor-60+50) > pos[0] > (xanchor-60) and (y-25+20) > pos[1] > y-25:
-		pygame.draw.rect(display_surface, b_red, (xanchor-60, y-25, 50, 20))
+	xanchor = int(x/2.) - 60
+	yanchor = y-25
+	w, h = 50, 20 # width and height of button
+	if (xanchor+w) > pos[0] > (xanchor) and (yanchor+h) > pos[1] > yanchor:
+		pygame.draw.rect(display_surface, b_red, (xanchor, yanchor, w, h))
 		if mstate[0]:
 			run = False
 			button_tone()
 		else:
 			run = True
 	else:
-		pygame.draw.rect(display_surface, red, (xanchor-60, y-25, 50, 20))
+		pygame.draw.rect(display_surface, red, (xanchor, yanchor, w, h))
 		run = True
-
-	smallText = pygame.font.Font("freesansbold.ttf",12)
-	textSurf, textRect = text_objects("STOP!", smallText)
-	textRect.center = ( (xanchor-60+(50/2)), (y-25+(20/2)) )
-	display_surface.blit(textSurf, textRect)
+	draw_text(display_surface, "STOP!", ((xanchor+(w/2)),(yanchor+(h/2))), 12)
 
 	return run
 
 def reset(display_surface, x, y, run, pos=(0,0), mstate=(0,0,0)):
-	xanchor = int(x/2.)
-	yanchor = int(y/2.)
-	if (xanchor+10+50) > pos[0] > (xanchor+10) and (y-25+20) > pos[1] > y-25:
-		pygame.draw.rect(display_surface, b_red, (xanchor+10, y-25, 50, 20))
+	xanchor = int(x/2.) + 10
+	yanchor = y - 25
+	w, h = 50, 20 # width and height of button
+	if (xanchor+w) > pos[0] > (xanchor) and (yanchor+h) > pos[1] > yanchor:
+		pygame.draw.rect(display_surface, b_red, (xanchor, yanchor, w, h))
 		if mstate[0]:
 			res_menu = True
 			run = False
@@ -174,48 +176,38 @@ def reset(display_surface, x, y, run, pos=(0,0), mstate=(0,0,0)):
 			res_menu = False
 			pass
 	else:
-		pygame.draw.rect(display_surface, red, (xanchor+10, y-25, 50, 20))
+		pygame.draw.rect(display_surface, red, (xanchor, yanchor, w, h))
 		res_menu = False
 
-	smallText = pygame.font.Font("freesansbold.ttf",12)
-	textSurf, textRect = text_objects("RESET", smallText)
-	textRect.center = ( (xanchor+10+(50/2)), (y-25+(20/2)) )
-	display_surface.blit(textSurf, textRect)
+	draw_text(display_surface, "RESET", ((xanchor+(w/2)),(yanchor+(h/2))), 12)
 
 	return run, res_menu
 
 def info_button(display_surface, x, y, run, pos=(0,0), mstate=(0,0,0)):
-	xanchor = int(x/2.)
-	yanchor = int(y/2.)
+	r = 10 # radius
+	xanchor = 20
+	yanchor = y-25+r
 
-	pygame.draw.circle(display_surface, black, ((x-x+20), (y-25+(20/2))), 10, 2)
+	pygame.draw.circle(display_surface, black, (xanchor, (yanchor)), r, 2)
+	draw_text(display_surface, "i", (xanchor,(yanchor+2)), 15)
 
-	smallText = pygame.font.Font("freesansbold.ttf",15)
-	textSurf, textRect = text_objects("i", smallText)
-	textRect.center = ( (x-x+20), (y-25+(20/2)+2))
-	display_surface.blit(textSurf, textRect)
-
-	# print str((pos[0],pos[1]))
-	if x-x+30 > pos[0] > x-x+10 and y-5 > pos[1] > y-22:
-		if mstate[0]:
-			show_i = True
-			run = False
-		else:
-			show_i = False
-	else:
-		show_i = False
-
+	# if 30 > pos[0] > 10 and y-5 > pos[1] > y-22:
+	# 	if mstate[0]:
+	# 		show_i = True
+	# 		run = False
+	# 	else:
+	# 		show_i = False
+	# else:
+	# 	show_i = False
+	show_i = ((30 > pos[0] > 10 and y-5 > pos[1] > y-22) and mstate[0])
+	if show_i:
+		run = False
 	return run, show_i
 
 def info(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
-	xanchor = int(x/2.)
-	yanchor = int(y/2.)
 	pygame.draw.rect(display_surface, white, (0, 0, x, y))
 
-	smallText = pygame.font.Font("freesansbold.ttf",18)
-	textSurf, textRect = text_objects("Back", smallText)
-	textRect.center = ( x-x+24 , y-y+10 )
-	display_surface.blit(textSurf, textRect)
+	draw_text(display_surface, "Back", (24,10), 18)
 
 	text_info = """John Conway's Cellular Automaton"""
 	text_info2 = """\n\nRules:\n\nEach Cell with one or no neighbors dies.\nEach cell with 4 or more neighbors dies.\nEach cell with two or three neighbors survives.\nEach empty cell with three neighbors becomes populated.\n\nControls:\n\nClick to populate/depopulate a cell.\nClick start to begin model.\nClick stop to end model.\nClick reset to clear or choose preset simulations.\n\nCreated by:\n\nRyan Oliver Schenck & Steven Lee-Kramer\n\ngithub.com/rschenck/game_of_life.git"""
@@ -234,138 +226,49 @@ def info(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 
 
 	# print str((pos[0],pos[1]))
-	if x-x+40 > pos[0] > x-x and y-y+18 > pos[1] > y-y:
-		if mstate[0]:
-			show_i = False
-		else:
-			show_i = True
-	else:
-		show_i = True
-
-
+	# if 40 > pos[0] > 0 and 18 > pos[1] > 0:
+	# 	if mstate[0]:
+	# 		show_i = False
+	# 	else:
+	# 		show_i = True
+	# else:
+	# 	show_i = True
+	# return show_i
+	show_i = not (mstate[0] and (40 > pos[0] > 0 and 18 > pos[1] > 0))
 	return show_i
 
 
 def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 	xanchor = int(x/2.)
 	yanchor = int(y/2.)
-
-	pygame.draw.rect(display_surface, white, (xanchor-(yanchor/2.), 0-(y/4.0)+200, yanchor, 260))
-
-	smallText = pygame.font.Font("freesansbold.ttf",18)
-	textSurf, textRect = text_objects("Blank", smallText)
-	textRect.center = ( (xanchor), (0-(y/4.0)+210) )
-	display_surface.blit(textSurf, textRect)
-
-	textSurf, textRect = text_objects("Gun", smallText)
-	textRect.center = ( (xanchor), (0-(y/4.0)+240) )
-	display_surface.blit(textSurf, textRect)
-
-	textSurf, textRect = text_objects("Ten", smallText)
-	textRect.center = ( (xanchor), (0-(y/4.0)+270) )
-	display_surface.blit(textSurf, textRect)
-
-	textSurf, textRect = text_objects("Binary", smallText)
-	textRect.center = ( (xanchor), (0-(y/4.0)+300) )
-	display_surface.blit(textSurf, textRect)
-
-	textSurf, textRect = text_objects("Face", smallText)
-	textRect.center = ( (xanchor), (0-(y/4.0)+330) )
-	display_surface.blit(textSurf, textRect)
-
-	textSurf, textRect = text_objects("Maze", smallText)
-	textRect.center = ( (xanchor), (0-(y/4.0)+360) )
-	display_surface.blit(textSurf, textRect)
-
-	textSurf, textRect = text_objects("Pulsar", smallText)
-	textRect.center = ( (xanchor), (0-(y/4.0)+390) )
-	display_surface.blit(textSurf, textRect)
-
-	textSurf, textRect = text_objects("Gliders", smallText)
-	textRect.center = ( (xanchor), (0-(y/4.0)+420) )
-	display_surface.blit(textSurf, textRect)
-
-	textSurf, textRect = text_objects("Random", smallText)
-	textRect.center = ( (xanchor), (0-(y/4.0)+450) )
-	display_surface.blit(textSurf, textRect)
-
-	# print str((pos[0],pos[1]))
-	
+	top = yanchor-130
 	s = 30
-	# clear
-	if xanchor+30 > pos[0] > xanchor-30 and s+5 > pos[1] > s-10:
-		if mstate[0]:
-			option = 'Blank'
-		else:
-			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and s+30+5 > pos[1] > s+30-10:
-		# print str((pos[0],pos[1]))
-		if mstate[0]:
-			option = 'Gun'
-		else:
-			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and s+60+5 > pos[1] > s+30-10:
-		# print str((pos[0],pos[1]))
-		if mstate[0]:
-			option = 'Ten'
-		else:
-			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and s+90+5 > pos[1] > s+90-10:
-		# print str((pos[0],pos[1]))
-		if mstate[0]:
-			option = 'Binary'
-		else:
-			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and s+120+5 > pos[1] > s+120-10:
-		# print str((pos[0],pos[1]))
-		if mstate[0]:
-			option = 'Face'
-		else:
-			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and s+150+5 > pos[1] > s+150-10:
-		# print str((pos[0],pos[1]))
-		if mstate[0]:
-			option = 'Maze'
-		else:
-			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and s+180+5 > pos[1] > s+180-10:
-		# print str((pos[0],pos[1]))
-		if mstate[0]:
-			option = 'Pulsar'
-		else:
-			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and s+210+5 > pos[1] > s+210-10:
-		# print str((pos[0],pos[1]))
-		if mstate[0]:
-			option = 'Gliders'
-		else:
-			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and s+240+5 > pos[1] > s+240-10:
-		# print str((pos[0],pos[1]))
-		if mstate[0]:
-			option = 'Random'
-		else:
-			option = ''
-	else:
-		option = ''
+	# draw the reset menu in the middle of the display_surface
+	pygame.draw.rect(display_surface, white, (xanchor-(yanchor/2.), top, yanchor, 260))
+	# set labels
+	labels = ["Blank", "Gun", "Ten", "Binary", "Face", "Maze", "Pulsar", "Gliders", "Random"]
+	# draw the labels
+	for i, item in enumerate(labels):
+		draw_text(display_surface, item, ((xanchor),(top+10+s*i)), 18)
 
+	option = ''
+	if mstate[0]:
+		for x, entry in enumerate(labels):
+			if xanchor+30 > pos[0] > xanchor-30 and top+s*(x+1) > pos[1] > top+s*(x):
+				option = entry
 	return option
 
-def click_creator(display_surface, x, y, click_option, pos=(0,0), mstate=(0,0,0), ):
-	xanchor = int(x/2.)
-	if (xanchor+180+50) > pos[0] > (xanchor+180) and (y-25+20) > pos[1] > y-25:
-		pygame.draw.rect(display_surface, (200,200,200), (xanchor+180, y-25, 50, 20))
+def click_creator(display_surface, x, y, click_option, pos=(0,0), mstate=(0,0,0)):
+	xanchor = int(x/2.) + 180
+	yanchor = y - 25
+	w, h = 50, 20 # width and height of button
+	if (xanchor+50) > pos[0] > (xanchor) and (yanchor+h) > pos[1] > yanchor:
+		pygame.draw.rect(display_surface, (200,200,200), (xanchor, yanchor, w, h))
 		if mstate[0]:
 			click_option = (click_option + 1) % (Conway_Shape(1).max() + 1) or 1
-		else:
-			pass
 	else:
-		pygame.draw.rect(display_surface, (150,150,150), (xanchor+180, y-25, 50, 20))
+		pygame.draw.rect(display_surface, (150,150,150), (xanchor, yanchor, w, h))
 
-
-	smallText = pygame.font.Font("freesansbold.ttf",12)
-	textSurf, textRect = text_objects(Conway_Shape(click_option).name, smallText)
-	textRect.center = ( (xanchor+180+(50/2)), (y-25+(20/2)) )
-	display_surface.blit(textSurf, textRect)
+	draw_text(display_surface, Conway_Shape(click_option).name,((xanchor+(w/2)), (yanchor+(h/2))),12)
 
 	return click_option
