@@ -258,17 +258,19 @@ def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 				option = entry
 	return option
 
+
 def click_creator(display_surface, x, y, click_option, pos=(0,0), mstate=(0,0,0)):
-	xanchor = int(x/2.) + 180
+	xanchor = x - 55
 	yanchor = y - 25
 	w, h = 50, 20 # width and height of button
-	if (xanchor+50) > pos[0] > (xanchor) and (yanchor+h) > pos[1] > yanchor:
+	if (xanchor+w) > pos[0] > (xanchor) and (yanchor+h) > pos[1] > yanchor:
 		pygame.draw.rect(display_surface, (200,200,200), (xanchor, yanchor, w, h))
 		if mstate[0]:
 			click_option = (click_option + 1) % (Conway_Shape(1).max() + 1) or 1
 	else:
 		pygame.draw.rect(display_surface, (150,150,150), (xanchor, yanchor, w, h))
 
-	draw_text(display_surface, Conway_Shape(click_option).name,((xanchor+(w/2)), (yanchor+(h/2))),12)
+	draw_text(display_surface, Conway_Shape(click_option).name,((xanchor+(w/2)),(yanchor+(h/2))),12)
+
 
 	return click_option
