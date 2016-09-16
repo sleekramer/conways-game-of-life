@@ -1,7 +1,7 @@
 import math
 import random
 import pygame
-
+from conway_shapes import click_handler, Conway_Shape
 black = (0,  0,  0)
 white = (255,255,255)
 darkgrey = (40, 40, 40)
@@ -34,7 +34,7 @@ def render_textrect(string, font, rect, text_color, background_color, justificat
     """
 
     import pygame
-    
+
     final_lines = []
 
     requested_lines = string.splitlines()
@@ -53,23 +53,23 @@ def render_textrect(string, font, rect, text_color, background_color, justificat
             accumulated_line = ""
             for word in words:
                 test_line = accumulated_line + word + " "
-                # Build the line while the words fit.    
+                # Build the line while the words fit.
                 if font.size(test_line)[0] < rect.width:
-                    accumulated_line = test_line 
-                else: 
-                    final_lines.append(accumulated_line) 
-                    accumulated_line = word + " " 
+                    accumulated_line = test_line
+                else:
+                    final_lines.append(accumulated_line)
+                    accumulated_line = word + " "
             final_lines.append(accumulated_line)
-        else: 
-            final_lines.append(requested_line) 
+        else:
+            final_lines.append(requested_line)
 
     # Let's try to write the text out on the surface.
 
-    surface = pygame.Surface(rect.size) 
-    surface.fill(background_color) 
+    surface = pygame.Surface(rect.size)
+    surface.fill(background_color)
 
-    accumulated_height = 0 
-    for line in final_lines: 
+    accumulated_height = 0
+    for line in final_lines:
         if accumulated_height + font.size(line)[1] >= rect.height:
             raise TextRectException, "Once word-wrapped, the text string was too tall to fit in the rect."
         if line != "":
@@ -98,7 +98,8 @@ def button_tone():
 	button = pygame.mixer.Sound('sound/button2.wav')
 	pygame.mixer.Sound.play(button)
 
-def user_select(gridDict, x, y, w, h):
+
+def user_select(gridDict, x, y, w, h, click_option):
 	x = round_up_nearest_ten(x) - 10
 	y = round_up_nearest_ten(y) - 10
 
@@ -109,8 +110,9 @@ def user_select(gridDict, x, y, w, h):
 		if gridDict[x,y].stat == 1:
 			gridDict[x,y].stat = 0
 		else:
-			# print 'gridDict[%s,%s].stat = 1' % (x,y)
-			gridDict[x,y].stat = 1
+			# print "Creating %s at [%s,%s]" % (Conway_Shape(click_option).name, x, y)
+			click_handler(gridDict, x, y, click_option)
+
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -217,7 +219,7 @@ def info(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 
 	text_info = """John Conway's Cellular Automaton"""
 	text_info2 = """\n\nRules:\n\nEach Cell with one or no neighbors dies.\nEach cell with 4 or more neighbors dies.\nEach cell with two or three neighbors survives.\nEach empty cell with three neighbors becomes populated.\n\nControls:\n\nClick to populate/depopulate a cell.\nClick start to begin model.\nClick stop to end model.\nClick reset to clear or choose preset simulations.\n\nCreated by:\n\nRyan Oliver Schenck & Steven Lee-Kramer\n\ngithub.com/rschenck/game_of_life.git"""
-	
+
 	# Headers
 	smallText = pygame.font.Font(None,26)
 	back_rect = pygame.Rect((x-x, y-y+60, x, y-50))
@@ -247,8 +249,9 @@ def info(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 	xanchor = int(x/2.)
 	yanchor = int(y/2.)
-	
+
 	pygame.draw.rect(display_surface, white, (xanchor-(yanchor/2.), 0-(y/4.0)+200, yanchor, 260))
+
 	smallText = pygame.font.Font("freesansbold.ttf",18)
 	textSurf, textRect = text_objects("Blank", smallText)
 	textRect.center = ( (xanchor), (0-(y/4.0)+210) )
@@ -348,8 +351,21 @@ def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 
 	return option
 
+def click_creator(display_surface, x, y, click_option, pos=(0,0), mstate=(0,0,0), ):
+	xanchor = int(x/2.)
+	if (xanchor+180+50) > pos[0] > (xanchor+180) and (y-25+20) > pos[1] > y-25:
+		pygame.draw.rect(display_surface, (200,200,200), (xanchor+180, y-25, 50, 20))
+		if mstate[0]:
+			click_option = (click_option + 1) % (Conway_Shape(1).max() + 1) or 1
+		else:
+			pass
+	else:
+		pygame.draw.rect(display_surface, (150,150,150), (xanchor+180, y-25, 50, 20))
 
 
+	smallText = pygame.font.Font("freesansbold.ttf",12)
+	textSurf, textRect = text_objects(Conway_Shape(click_option).name, smallText)
+	textRect.center = ( (xanchor+180+(50/2)), (y-25+(20/2)) )
+	display_surface.blit(textSurf, textRect)
 
-
-
+	return click_option
