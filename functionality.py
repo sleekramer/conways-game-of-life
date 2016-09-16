@@ -353,19 +353,26 @@ def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 
 def click_creator(display_surface, x, y, click_option, pos=(0,0), mstate=(0,0,0), ):
 	xanchor = int(x/2.)
-	if (xanchor+180+50) > pos[0] > (xanchor+180) and (y-25+20) > pos[1] > y-25:
-		pygame.draw.rect(display_surface, (200,200,200), (xanchor+180, y-25, 50, 20))
+	
+	# print str((pos[0],pos[1]))
+	if (x) > pos[0] > (x-50) and (y-25+20) > pos[1] > y-25:
+		pygame.draw.rect(display_surface, (200,200,200), (x-55, y-25, 50, 20))
 		if mstate[0]:
 			click_option = (click_option + 1) % (Conway_Shape(1).max() + 1) or 1
 		else:
 			pass
 	else:
-		pygame.draw.rect(display_surface, (150,150,150), (xanchor+180, y-25, 50, 20))
+		pygame.draw.rect(display_surface, (150,150,150), (x-55, y-25, 50, 20))
 
 
 	smallText = pygame.font.Font("freesansbold.ttf",12)
 	textSurf, textRect = text_objects(Conway_Shape(click_option).name, smallText)
-	textRect.center = ( (xanchor+180+(50/2)), (y-25+(20/2)) )
+	textRect.center = ( x-30, (y-25+(20/2)) )
 	display_surface.blit(textSurf, textRect)
 
 	return click_option
+
+
+
+
+
