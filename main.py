@@ -5,16 +5,14 @@ import math
 import random
 import time
 from functionality import random_color, user_select, start, stop, reset, reset_options, info_button, info
-from presets import gun, create_glider, blank, tens, pulsar, gliders, maze, faces, binary_101
+from presets import gun, create_glider, blank, tens, pulsar, gliders, maze, faces, binary_101, rando
 
 # Define global variables
-width = 500
-height = 500
+width = 1200
+height = 600
 cellsize = 10
 fps = 30.0
-# Catch if width and height are valid for board
-assert width % cellsize == 0
-assert height % cellsize == 0
+
 
 black = (0,  0,  0)
 white = (255,255,255)
@@ -51,7 +49,7 @@ def blanks(gridDict):
 			gridDict[x,y] = cell((x,y), stat)
 
 	# Default Starting option
-	gun(gridDict)
+	rando(gridDict)
 
 	return gridDict
 
@@ -118,14 +116,30 @@ def color(gridDict):
 		elif to_col[item].stat ==0:
 			pygame.draw.rect(display_surface, black, (to_col[item].loc[0],to_col[item].loc[1],cellsize,cellsize))
 
-def banner(display_surface):
-	pygame.draw.rect(display_surface, white, (0, 470, 500, 30))
+def banner(display_surface, x, y):
+	pygame.draw.rect(display_surface, white, (0, y-30, x, 30))
 
 def main(gridDict, otherDict):
 	pygame.init()
 	pygame.mixer.init()
+
+	# # get screen size
+	# display_info = pygame.display.Info()
+
+	# if display_info.current_w > 2000:
+	# 	width = int(display_info.current_w/2.)
+	# 	height = int(display_info.current_h/2.)
+	# else:
+	# 	width = int(display_info.current_w)
+	# 	height = int(display_info.current_h)
+
+	# # Catch if width and height are valid for board
+	# assert width % cellsize == 0
+	# assert height % cellsize == 0
+
 	pygame.mixer.music.load('sound/emotion.wav')
 	pygame.mixer.music.play(loops=-1, start=0.0)
+
 	global display_surface
 
 	fpsclock = pygame.time.Clock()
@@ -137,17 +151,18 @@ def main(gridDict, otherDict):
 	color(gridDict)
 	drawGrid()
 
-	banner(display_surface)
-	run = start(display_surface, width, height)
-
-	pygame.display.update()
-	# time.sleep(40)
 	x = width
 	y = height
 	mouse = (0,0,0)
 	reset_this = False
 	show_i = False
 	option = ''
+	banner(display_surface, x, y)
+	run = start(display_surface, width, height)
+
+	pygame.display.update()
+	# time.sleep(40)
+	
 	# pos = (0,0)
 	while True: #main game loop
 		for event in pygame.event.get():
@@ -165,7 +180,7 @@ def main(gridDict, otherDict):
 		if mouse[0]:
 			if reset_this == False and show_i == False:
 				# create_glider(gridDict,pos[0],pos[1])
-				user_select(gridDict,pos[0],pos[1])
+				user_select(gridDict,pos[0],pos[1], width, height)
 		if run:
 			gridDict, otherDict = tick(gridDict, otherDict)
 		else:
@@ -174,7 +189,7 @@ def main(gridDict, otherDict):
 		user_tick(gridDict)
 		drawGrid()
 
-		banner(display_surface)
+		banner(display_surface, x, y)
 
 		# Controls
 		if run:
@@ -227,6 +242,10 @@ def main(gridDict, otherDict):
 		elif option == 'Gliders':
 			blank(gridDict)
 			gliders(gridDict)
+			reset_this = False
+		elif option == 'Random':
+			blank(gridDict)
+			rando(gridDict)
 			reset_this = False
 		else:
 			pass

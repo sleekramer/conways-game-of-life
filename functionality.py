@@ -98,13 +98,13 @@ def button_tone():
 	button = pygame.mixer.Sound('sound/button2.wav')
 	pygame.mixer.Sound.play(button)
 
-def user_select(gridDict, x, y):
+def user_select(gridDict, x, y, w, h):
 	x = round_up_nearest_ten(x) - 10
 	y = round_up_nearest_ten(y) - 10
 
 	# if mouse pos != within banner add square
 	# Banner Dimensions: (0, 470, 500, 30)
-	if 500 > x > 0 and 470 > y > 0:
+	if w > x > w-w and h-30 > y > h-h:
 		button_tone()
 		if gridDict[x,y].stat == 1:
 			gridDict[x,y].stat = 0
@@ -211,21 +211,21 @@ def info(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 	pygame.draw.rect(display_surface, white, (0, 0, x, y))
 
 	smallText = pygame.font.Font("freesansbold.ttf",18)
-	textSurf, textRect = text_objects("Exit", smallText)
-	textRect.center = ( x-x+20 , y-y+10 )
+	textSurf, textRect = text_objects("Back", smallText)
+	textRect.center = ( x-x+24 , y-y+10 )
 	display_surface.blit(textSurf, textRect)
 
 	text_info = """John Conway's Cellular Automaton"""
 	text_info2 = """\n\nRules:\n\nEach Cell with one or no neighbors dies.\nEach cell with 4 or more neighbors dies.\nEach cell with two or three neighbors survives.\nEach empty cell with three neighbors becomes populated.\n\nControls:\n\nClick to populate/depopulate a cell.\nClick start to begin model.\nClick stop to end model.\nClick reset to clear or choose preset simulations.\n\nCreated by:\n\nRyan Oliver Schenck & Steven Lee-Kramer\n\ngithub.com/rschenck/game_of_life.git"""
 	
 	# Headers
-	smallText = pygame.font.Font(None,24)
+	smallText = pygame.font.Font(None,26)
 	back_rect = pygame.Rect((x-x, y-y+60, x, y-50))
 	rendered_text = render_textrect(text_info, smallText, back_rect, black, white, 1)
 	display_surface.blit(rendered_text, back_rect)
 
 	# Other Text
-	smallText = pygame.font.Font(None,18)
+	smallText = pygame.font.Font(None,22)
 	back_rect = pygame.Rect((x-x, y-y+80, x, y-50))
 	rendered_text = render_textrect(text_info2, smallText, back_rect, black, white, 1)
 	display_surface.blit(rendered_text, back_rect)
@@ -248,7 +248,7 @@ def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 	xanchor = int(x/2.)
 	yanchor = int(y/2.)
 	
-	pygame.draw.rect(display_surface, white, (xanchor-(yanchor/2.), 0-(y/4.0)+200, yanchor, 230))
+	pygame.draw.rect(display_surface, white, (xanchor-(yanchor/2.), 0-(y/4.0)+200, yanchor, 260))
 	smallText = pygame.font.Font("freesansbold.ttf",18)
 	textSurf, textRect = text_objects("Blank", smallText)
 	textRect.center = ( (xanchor), (0-(y/4.0)+210) )
@@ -282,53 +282,65 @@ def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 	textRect.center = ( (xanchor), (0-(y/4.0)+420) )
 	display_surface.blit(textSurf, textRect)
 
+	textSurf, textRect = text_objects("Random", smallText)
+	textRect.center = ( (xanchor), (0-(y/4.0)+450) )
+	display_surface.blit(textSurf, textRect)
+
 	# print str((pos[0],pos[1]))
+
+	s = 60
 	# clear
-	if xanchor+30 > pos[0] > xanchor-30 and 94 > pos[1] > 74:
+	if xanchor+30 > pos[0] > xanchor-30 and s+5 > pos[1] > s-10:
 		if mstate[0]:
 			option = 'Blank'
 		else:
 			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and 122 > pos[1] > 102:
+	elif xanchor+30 > pos[0] > xanchor-30 and s+30+5 > pos[1] > s+30-10:
 		# print str((pos[0],pos[1]))
 		if mstate[0]:
 			option = 'Gun'
 		else:
 			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and 151 > pos[1] > 135:
+	elif xanchor+30 > pos[0] > xanchor-30 and s+60+5 > pos[1] > s+30-10:
 		# print str((pos[0],pos[1]))
 		if mstate[0]:
 			option = 'Ten'
 		else:
 			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and 186 > pos[1] > 164:
+	elif xanchor+30 > pos[0] > xanchor-30 and s+90+5 > pos[1] > s+90-10:
 		# print str((pos[0],pos[1]))
 		if mstate[0]:
 			option = 'Binary'
 		else:
 			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and 215 > pos[1] > 195:
+	elif xanchor+30 > pos[0] > xanchor-30 and s+120+5 > pos[1] > s+120-10:
 		# print str((pos[0],pos[1]))
 		if mstate[0]:
 			option = 'Face'
 		else:
 			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and 243 > pos[1] > 225:
+	elif xanchor+30 > pos[0] > xanchor-30 and s+150+5 > pos[1] > s+150-10:
 		# print str((pos[0],pos[1]))
 		if mstate[0]:
 			option = 'Maze'
 		else:
 			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and 275 > pos[1] > 255:
+	elif xanchor+30 > pos[0] > xanchor-30 and s+180+5 > pos[1] > s+180-10:
 		# print str((pos[0],pos[1]))
 		if mstate[0]:
 			option = 'Pulsar'
 		else:
 			option = ''
-	elif xanchor+30 > pos[0] > xanchor-30 and 305 > pos[1] > 285:
+	elif xanchor+30 > pos[0] > xanchor-30 and s+210+5 > pos[1] > s+210-10:
 		# print str((pos[0],pos[1]))
 		if mstate[0]:
 			option = 'Gliders'
+		else:
+			option = ''
+	elif xanchor+30 > pos[0] > xanchor-30 and s+240+5 > pos[1] > s+240-10:
+		# print str((pos[0],pos[1]))
+		if mstate[0]:
+			option = 'Random'
 		else:
 			option = ''
 	else:
