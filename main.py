@@ -8,8 +8,8 @@ from functionality import random_color, user_select, start, stop, reset, reset_o
 from presets import gun, create_glider, blank, tens, pulsar, gliders, maze, faces, binary_101, rando
 
 # Define global variables
-width = 1200
-height = 600
+# width = 1200
+# height = 600
 cellsize = 10
 fps = 30.0
 
@@ -40,7 +40,7 @@ def drawGrid():
 	return None
 
 # fill gridDict will cells, randomly assign cell.stat values
-def blanks(gridDict):
+def blanks(gridDict, width, height):
 
 	for y in range(0, height, cellsize):
 		for x in range (0, width, cellsize):
@@ -123,31 +123,31 @@ def main(gridDict, otherDict):
 	pygame.init()
 	pygame.mixer.init()
 
-	# # get screen size
-	# display_info = pygame.display.Info()
+	# get screen size
+	display_info = pygame.display.Info()
 
-	# if display_info.current_w > 2000:
-	# 	width = int(display_info.current_w/2.)
-	# 	height = int(display_info.current_h/2.)
-	# else:
-	# 	width = int(display_info.current_w)
-	# 	height = int(display_info.current_h)
+	if display_info.current_w > 2000:
+		width = int(display_info.current_w/2.)
+		height = int(display_info.current_h/2.)
+	else:
+		width = int(display_info.current_w)
+		height = int(display_info.current_h)
 
-	# # Catch if width and height are valid for board
-	# assert width % cellsize == 0
-	# assert height % cellsize == 0
+	# Catch if width and height are valid for board
+	assert width % cellsize == 0
+	assert height % cellsize == 0
 
 	pygame.mixer.music.load('sound/emotion.wav')
 	pygame.mixer.music.play(loops=-1, start=0.0)
 
-	global display_surface
+	global display_surface, width, height
 
 	fpsclock = pygame.time.Clock()
 	display_surface = pygame.display.set_mode((width,height))
 	display_surface.fill(black)
 	pygame.display.set_caption('Game of Life')
 
-	blanks(gridDict)
+	blanks(gridDict, width, height)
 	color(gridDict)
 	drawGrid()
 
