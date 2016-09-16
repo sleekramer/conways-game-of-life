@@ -287,7 +287,7 @@ def reset_options(display_surface, x, y, pos=(0,0), mstate=(0,0,0)):
 	display_surface.blit(textSurf, textRect)
 
 	# print str((pos[0],pos[1]))
-
+	
 	s = 30
 	# clear
 	if xanchor+30 > pos[0] > xanchor-30 and s+5 > pos[1] > s-10:

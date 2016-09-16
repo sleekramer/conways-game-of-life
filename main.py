@@ -54,6 +54,7 @@ def blanks(gridDict, width, height):
 	return gridDict
 
 def user_tick(gridDict):
+	#Colors user boxes
 	color(gridDict)
 
 def check_neighbors(item, gridDict):
